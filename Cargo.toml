@@ -15,7 +15,7 @@ chrono = "0.4.23"
 aws-config = "0.54.1"
 aws-sdk-dynamodb = "0.24.0"
 lambda_runtime = "0.7.0"
-aws_lambda_events = "0.7.2"
+aws_lambda_events = "0.7.3"
 tokio = { version = "1.21.2", features = ["full"] }
 rdkafka = { version = "0.29.0", features = ["ssl", "gssapi-vendored"] }
 async-trait = "0.1.58"
