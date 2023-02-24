@@ -1,0 +1,33 @@
+{
+  "branches": [
+    "main"
+  ],
+  "plugins": [
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/release-notes-generator",
+    "@semantic-release/changelog",
+    [
+      "@semantic-release/exec",
+      {
+        "prepareCmd": "sed -i 's/^version = .*/version = \"${nextRelease.version}\"/g' Cargo.toml; git add Cargo.toml",
+        "publishCmd": "make build"
+      }
+    ],
+    [
+      "@semantic-release/git",
+      {
+        "assets": [
+          "CHANGELOG.md"
+        ]
+      }
+    ],
+    [
+      "@semantic-release/github",
+      {
+        "assets": [
+          { "path": "target/bootstrap.zip", "label": "Lambda function ZIP" }
+        ]
+      }
+    ]
+  ]
+}

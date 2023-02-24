@@ -1,0 +1,12 @@
+{
+    "id": "p1",
+    "name": "Test product 1",
+    "price": 10,
+    "tags": ["testproduct"],
+    "dimensions": {
+        "length": 100,
+        "width": 200,
+        "height": 300
+    },
+    "lastModified": "2022-08-23T05:55:39.122Z"
+}
