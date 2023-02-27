@@ -20,5 +20,5 @@ jobs:
             @semantic-release/changelog
             @semantic-release/exec
             @semantic-release/git
-          env:
-            GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
