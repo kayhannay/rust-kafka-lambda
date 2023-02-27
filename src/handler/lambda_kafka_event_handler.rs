@@ -1,10 +1,10 @@
+use aws_lambda_events::event::kafka::KafkaEvent;
 use lambda_runtime::{Error, LambdaEvent};
 use serde_json::{json, Value};
 use slog::{Logger, info};
 
 use crate::business::save_converted_product_use_case::SaveConvertedProductUseCase;
 use crate::controller::lambda_kafka_event_controller::lambda_kafka_event_controller;
-use crate::domain::kafka_event::KafkaEvent;
 
 pub struct LambdaKafkaEventHandler {
     pub log: Logger,

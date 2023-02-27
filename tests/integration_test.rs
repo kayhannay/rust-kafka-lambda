@@ -1,14 +1,14 @@
 use std::collections::HashMap;
 use std::fs;
-use std::str::FromStr;
 use std::time::Duration;
 
 use aws_config::meta::region::RegionProviderChain;
-use aws_sdk_dynamodb::{Client, Endpoint, Credentials};
+use aws_lambda_events::encodings::MillisecondTimestamp;
+use aws_lambda_events::event::kafka::{KafkaEvent, KafkaRecord};
+use aws_sdk_dynamodb::{Client, Credentials};
 use aws_sdk_dynamodb::model::{AttributeDefinition, AttributeValue, KeySchemaElement, KeyType, ProvisionedThroughput, ScalarAttributeType};
 use chrono::DateTime;
 use futures::StreamExt;
-use http::Uri;
 use lambda_runtime::LambdaEvent;
 use rdkafka::{ClientConfig, Message};
 use rdkafka::consumer::{Consumer, StreamConsumer};
@@ -20,7 +20,6 @@ use lib_base64::Base64;
 use rust_kafka_lambda::adapter::dynamodb_store_converted_product_service::DynamoDbStoreConvertedProductService;
 use rust_kafka_lambda::adapter::kafka_notify_update_product_service::KafkaNotifyUpdateProductService;
 use rust_kafka_lambda::business::save_converted_product_use_case::SaveConvertedProductUseCase;
-use rust_kafka_lambda::domain::kafka_event::{KafkaEvent, KafkaRecord, MillisecondTimestamp};
 use rust_kafka_lambda::domain::product::Product;
 use rust_kafka_lambda::handler::lambda_kafka_event_handler::LambdaKafkaEventHandler;
 use rust_kafka_lambda;

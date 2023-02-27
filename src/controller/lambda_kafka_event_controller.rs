@@ -1,4 +1,5 @@
-use crate::domain::{product::{Product}, product_event::ProductEvent, kafka_event::KafkaEvent};
+use aws_lambda_events::event::kafka::KafkaEvent;
+use crate::domain::{product::{Product}, product_event::ProductEvent};
 use lib_base64::Base64;
 use log::info;
 

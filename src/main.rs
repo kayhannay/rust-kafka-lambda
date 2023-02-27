@@ -4,12 +4,12 @@ extern crate serde;
 extern crate serde_json;
 
 use std::env;
+use aws_lambda_events::kafka::KafkaEvent;
 
 use aws_sdk_dynamodb::Client;
 use lambda_runtime::{Error, LambdaEvent, service_fn};
 use rdkafka::ClientConfig;
 use rdkafka::producer::FutureProducer;
-use rust_kafka_lambda::domain::kafka_event::KafkaEvent;
 use slog::{Drain, o, Logger, info};
 
 use rust_kafka_lambda::adapter::dynamodb_store_converted_product_service::DynamoDbStoreConvertedProductService;
