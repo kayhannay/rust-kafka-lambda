@@ -1,0 +1,47 @@
+name: push-stage
+
+on:
+  push:
+    branches:
+      - "stage/*"
+
+permissions:
+  contents: write
+  id-token: write
+  packages: read
+  checks: write
+  pull-requests: write
+  issues: read
+  actions: read
+  security-events: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: wagoid/commitlint-github-action@v5
+        if: (github.actor != 'dependabot[bot]') && (contains(github.head_ref, 'dependabot/') == false)
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+      - run: sudo apt install -y  libsasl2-dev
+      - run: make test
+  merge:
+    name: merge
+    needs:
+      - check
+    runs-on: ubuntu-latest
+    steps:
+      - shell: bash
+        run: |-
+          git config --global user.name "CI"
+          git config --global user.email "klinux@hannay.de"
+          git clone "https://$GITHUB_ACTOR:${{ secrets.GH_TOKEN }}@github.com/$GITHUB_REPOSITORY" repo
+          cd repo
+          git checkout origin/main
+          git merge --commit --ff-only origin/${{ github.ref_name }}
+          git push origin HEAD:main
+          git push origin --delete ${{ github.ref_name }}

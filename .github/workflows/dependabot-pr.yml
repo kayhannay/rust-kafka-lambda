@@ -1,0 +1,43 @@
+name: dependabot-pr
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+
+permissions:
+  contents: write
+  id-token: write
+  packages: read
+  checks: write
+  pull-requests: write
+  issues: read
+  actions: read
+  security-events: write
+
+jobs:
+  check:
+    if: ${{ github.actor == 'dependabot[bot]' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: wagoid/commitlint-github-action@v5
+        if: (github.actor != 'dependabot[bot]') && (contains(github.head_ref, 'dependabot/') == false)
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+      - run: sudo apt install -y  libsasl2-dev
+      - run: make test
+  merge:
+    if: ${{ github.actor == 'dependabot[bot]' }}
+    needs: [ check ]
+    steps:
+      - name: Enable auto-merge for Dependabot PRs
+        run: gh pr merge --auto --merge "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
