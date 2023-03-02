@@ -16,7 +16,7 @@ aws-config = "0.54.1"
 aws-sdk-dynamodb = "0.24.0"
 lambda_runtime = "0.7.3"
 aws_lambda_events = { git = "https://github.com/kayhannay/aws-lambda-events" }
-tokio = { version = "1.25.0", features = ["full"] }
+tokio = { version = "1.26.0", features = ["full"] }
 rdkafka = { version = "0.29.0", features = ["ssl", "gssapi-vendored"] }
 async-trait = "0.1.64"
 strum_macros = "0.24.3"
