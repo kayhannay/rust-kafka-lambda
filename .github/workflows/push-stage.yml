@@ -27,7 +27,9 @@ jobs:
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
-      - run: sudo apt install -y  libsasl2-dev
+      - run: |
+          sudo apt update
+          sudo apt install -y libsasl2-dev
       - run: make test
   merge:
     name: merge
