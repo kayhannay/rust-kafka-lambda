@@ -1,3 +1,11 @@
+## [1.0.6](https://github.com/kayhannay/rust-kafka-lambda/compare/v1.0.5...v1.0.6) (2023-03-13)
+
+
+### Bug Fixes
+
+* **deps:** bump chrono from 0.4.23 to 0.4.24 ([d7c08f6](https://github.com/kayhannay/rust-kafka-lambda/commit/d7c08f662984411388cb59b1c9a08f03159f5a38))
+* **deps:** bump futures from 0.3.26 to 0.3.27 ([6a87e45](https://github.com/kayhannay/rust-kafka-lambda/commit/6a87e45fa55857f32392a2ba637e21da3d094968))
+
 ## [1.0.5](https://github.com/kayhannay/rust-kafka-lambda/compare/v1.0.4...v1.0.5) (2023-03-09)
 
 
