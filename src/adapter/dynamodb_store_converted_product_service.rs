@@ -1,6 +1,6 @@
 use aws_sdk_dynamodb::Client;
-use aws_sdk_dynamodb::model::AttributeValue;
 use async_trait::async_trait;
+use aws_sdk_dynamodb::types::AttributeValue;
 use crate::domain::converted_product::{ConvertedProduct};
 use crate::services::store_converted_product_service::StoreConvertedProductService;
 
