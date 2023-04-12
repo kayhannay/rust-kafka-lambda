@@ -13,7 +13,7 @@ serde_json = "1.0.95"
 serde_derive = "1.0.152"
 chrono = "0.4.24"
 aws-config = "0.54.1"
-aws-sdk-dynamodb = "0.24.0"
+aws-sdk-dynamodb = "0.25.1"
 lambda_runtime = "0.8.0"
 aws_lambda_events = { git = "https://github.com/kayhannay/aws-lambda-events" }
 tokio = { version = "1.27.0", features = ["full"] }
