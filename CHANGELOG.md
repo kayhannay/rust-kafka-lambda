@@ -1,3 +1,11 @@
+## [1.0.19](https://github.com/kayhannay/rust-kafka-lambda/compare/v1.0.18...v1.0.19) (2023-04-13)
+
+
+### Bug Fixes
+
+* **deps:** bump aws-config from 0.55.0 to 0.55.1 ([e7c45f8](https://github.com/kayhannay/rust-kafka-lambda/commit/e7c45f872c74908a550b208bb5b59e7b35ec4c21))
+* **deps:** bump serde_json from 1.0.95 to 1.0.96 ([a226878](https://github.com/kayhannay/rust-kafka-lambda/commit/a22687856ed4f529dfd30266fe08272fd58cc9c6))
+
 ## [1.0.18](https://github.com/kayhannay/rust-kafka-lambda/compare/v1.0.17...v1.0.18) (2023-04-12)
 
 
