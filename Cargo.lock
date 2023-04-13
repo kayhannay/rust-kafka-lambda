@@ -170,9 +170,9 @@ dependencies = [
 
 [[package]]
 name = "aws-sdk-dynamodb"
-version = "0.25.1"
+version = "0.26.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7dfff6b9b8a92fa1f78862efcfdf0ffb31a2f880091e6b6d289fa904dad95715"
+checksum = "4ad47d90d7ca8b477fc4ef54743247ac3a9dd603682c8ba96782dd6d560e958a"
 dependencies = [
  "aws-credential-types",
  "aws-endpoint",
@@ -1504,7 +1504,7 @@ dependencies = [
 
 [[package]]
 name = "rust_kafka_lambda"
-version = "1.0.18"
+version = "1.0.19"
 dependencies = [
  "async-trait",
  "aws-config",
