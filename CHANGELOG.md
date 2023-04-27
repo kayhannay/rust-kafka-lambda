@@ -1,3 +1,10 @@
+## [1.0.22](https://github.com/kayhannay/rust-kafka-lambda/compare/v1.0.21...v1.0.22) (2023-04-27)
+
+
+### Bug Fixes
+
+* **deps:** bump aws_lambda_events from 0.8.3 to 0.8.4 ([1817361](https://github.com/kayhannay/rust-kafka-lambda/commit/1817361a16c34b6536084b9c28046ea38d6c41cd))
+
 ## [1.0.21](https://github.com/kayhannay/rust-kafka-lambda/compare/v1.0.20...v1.0.21) (2023-04-26)
 
 
