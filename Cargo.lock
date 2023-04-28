@@ -411,9 +411,9 @@ dependencies = [
 
 [[package]]
 name = "aws_lambda_events"
-version = "0.8.4"
+version = "0.8.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b319f19c4e0d0c5f3ce583c2e578aeb375250791551d68aabaf8a86ec7cc5386"
+checksum = "a19b34cce92060dfb0bdab64b7f4e534c99ed0b7be7ba4a776972021919ae217"
 dependencies = [
  "base64 0.13.0",
  "bytes",
@@ -1504,7 +1504,7 @@ dependencies = [
 
 [[package]]
 name = "rust_kafka_lambda"
-version = "1.0.21"
+version = "1.0.22"
 dependencies = [
  "async-trait",
  "aws-config",
