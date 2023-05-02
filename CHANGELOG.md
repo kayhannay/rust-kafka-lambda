@@ -1,3 +1,10 @@
+## [1.0.25](https://github.com/kayhannay/rust-kafka-lambda/compare/v1.0.24...v1.0.25) (2023-05-02)
+
+
+### Bug Fixes
+
+* **deps:** bump aws-config from 0.55.1 to 0.55.2 ([0c6a311](https://github.com/kayhannay/rust-kafka-lambda/commit/0c6a3110992b31906347d3bb3fc1955389ddce7d))
+
 ## [1.0.24](https://github.com/kayhannay/rust-kafka-lambda/compare/v1.0.23...v1.0.24) (2023-05-02)
 
 
