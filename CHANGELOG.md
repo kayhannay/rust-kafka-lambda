@@ -1,3 +1,10 @@
+## [1.0.29](https://github.com/kayhannay/rust-kafka-lambda/compare/v1.0.28...v1.0.29) (2023-05-12)
+
+
+### Bug Fixes
+
+* **deps:** bump lib-base64 from 2.0.3 to 2.0.4 ([d7afb71](https://github.com/kayhannay/rust-kafka-lambda/commit/d7afb7149e5f64d11a5bdae670197231b0ea702d))
+
 ## [1.0.28](https://github.com/kayhannay/rust-kafka-lambda/compare/v1.0.27...v1.0.28) (2023-05-11)
 
 
