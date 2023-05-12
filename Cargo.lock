@@ -1101,9 +1101,9 @@ checksum = "e2abad23fbc42b3700f2f279844dc832adb2b2eb069b2df918f455c4e18cc646"
 
 [[package]]
 name = "lib-base64"
-version = "2.0.3"
+version = "2.0.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2aaae3bcfe9090b36866391a9604df2a86630fa6a6df6e52a204ef609fd3939c"
+checksum = "e7280ef4c75c8c3b71116524b178d1bee26cbd9af0167e507fa8c7616bb69a8d"
 
 [[package]]
 name = "libc"
@@ -1504,7 +1504,7 @@ dependencies = [
 
 [[package]]
 name = "rust_kafka_lambda"
-version = "1.0.27"
+version = "1.0.28"
 dependencies = [
  "async-trait",
  "aws-config",

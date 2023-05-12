@@ -29,7 +29,7 @@ slog-async = "2.7.0"
 slog-stdlog = "4.1.1"
 slog-scope = "4.4.0"
 slog-envlogger = "2.2.0"
-lib-base64 = "2.0.3"
+lib-base64 = "2.0.4"
 
 [dev-dependencies]
 testcontainers = "0.14.0"
