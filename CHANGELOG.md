@@ -1,3 +1,10 @@
+## [1.0.38](https://github.com/kayhannay/rust-kafka-lambda/compare/v1.0.37...v1.0.38) (2023-05-30)
+
+
+### Bug Fixes
+
+* **deps:** bump log from 0.4.17 to 0.4.18 ([efd6702](https://github.com/kayhannay/rust-kafka-lambda/commit/efd670226deec0d338d1ef5105f9deff654d3ce8))
+
 ## [1.0.37](https://github.com/kayhannay/rust-kafka-lambda/compare/v1.0.36...v1.0.37) (2023-05-30)
 
 
