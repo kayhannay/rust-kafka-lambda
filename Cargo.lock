@@ -417,9 +417,9 @@ dependencies = [
 
 [[package]]
 name = "aws_lambda_events"
-version = "0.9.0"
+version = "0.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1d13f801d4f819391ec4bcfcaa05f697e54992e90fb96d7bdaec87cbce3abce9"
+checksum = "65991dbc3bfb586939ba1527eefdc99bc21157b6ec891f180fb1e16e2dddc7a9"
 dependencies = [
  "base64",
  "bytes",
@@ -430,7 +430,6 @@ dependencies = [
  "http-serde",
  "query_map",
  "serde",
- "serde_derive",
  "serde_dynamo",
  "serde_json",
  "serde_with 3.0.0",
@@ -1504,7 +1503,7 @@ dependencies = [
 
 [[package]]
 name = "rust_kafka_lambda"
-version = "1.0.34"
+version = "1.0.36"
 dependencies = [
  "async-trait",
  "aws-config",
