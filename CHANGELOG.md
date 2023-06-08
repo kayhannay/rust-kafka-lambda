@@ -1,3 +1,10 @@
+## [1.0.40](https://github.com/kayhannay/rust-kafka-lambda/compare/v1.0.39...v1.0.40) (2023-06-08)
+
+
+### Bug Fixes
+
+* **deps:** bump serde from 1.0.163 to 1.0.164 ([8a23a71](https://github.com/kayhannay/rust-kafka-lambda/commit/8a23a716dff26a67b7998fc5ef67887476d19c01))
+
 ## [1.0.39](https://github.com/kayhannay/rust-kafka-lambda/compare/v1.0.38...v1.0.39) (2023-05-31)
 
 
