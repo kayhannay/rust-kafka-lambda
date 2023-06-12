@@ -21,7 +21,7 @@ rdkafka = { version = "0.31.0", features = ["ssl", "gssapi-vendored"] }
 async-trait = "0.1.68"
 strum_macros = "0.24.3"
 futures = "0.3.28"
-log = "0.4.18"
+log = "0.4.19"
 slog = "2.7.0"
 slog-json = "2.6.1"
 slog-term = "2.9.0"
