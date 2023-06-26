@@ -9,7 +9,7 @@ edition = "2021"
 schemafy = "0.6.0"
 schemafy_core = { version = "0.6.0" }
 serde = "1.0.164"
-serde_json = "1.0.97"
+serde_json = "1.0.99"
 serde_derive = "1.0.152"
 chrono = "0.4.26"
 aws-config = "0.55.3"
