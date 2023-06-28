@@ -1,3 +1,10 @@
+## [1.0.47](https://github.com/kayhannay/rust-kafka-lambda/compare/v1.0.46...v1.0.47) (2023-06-28)
+
+
+### Bug Fixes
+
+* **deps:** bump tokio from 1.28.2 to 1.29.0 ([8930e4a](https://github.com/kayhannay/rust-kafka-lambda/commit/8930e4adbc3592f2b80327f8e98880ec208fb682))
+
 ## [1.0.46](https://github.com/kayhannay/rust-kafka-lambda/compare/v1.0.45...v1.0.46) (2023-06-26)
 
 
