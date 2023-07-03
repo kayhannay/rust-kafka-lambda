@@ -1,3 +1,10 @@
+## [1.0.49](https://github.com/kayhannay/rust-kafka-lambda/compare/v1.0.48...v1.0.49) (2023-07-03)
+
+
+### Bug Fixes
+
+* **deps:** bump rdkafka from 0.32.2 to 0.33.0 ([305d36a](https://github.com/kayhannay/rust-kafka-lambda/commit/305d36a43288dd00578afc5b7f0d594547a10915))
+
 ## [1.0.48](https://github.com/kayhannay/rust-kafka-lambda/compare/v1.0.47...v1.0.48) (2023-06-30)
 
 
