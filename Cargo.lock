@@ -426,9 +426,9 @@ dependencies = [
 
 [[package]]
 name = "aws_lambda_events"
-version = "0.10.0"
+version = "0.11.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "65991dbc3bfb586939ba1527eefdc99bc21157b6ec891f180fb1e16e2dddc7a9"
+checksum = "771c11de66cef31b3f49f0b38f06d94f0af424f60381409fc21972ff9c8f835b"
 dependencies = [
  "base64",
  "bytes",
@@ -1413,9 +1413,9 @@ dependencies = [
 
 [[package]]
 name = "query_map"
-version = "0.6.0"
+version = "0.7.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4465aacac3bebc9484cf7a56dc8b2d7feacb657da6002a9198b4f7af4247a204"
+checksum = "5eab6b8b1074ef3359a863758dae650c7c0c6027927a085b7af911c8e0bf3a15"
 dependencies = [
  "form_urlencoded",
  "serde",
@@ -1547,7 +1547,7 @@ dependencies = [
 
 [[package]]
 name = "rust_kafka_lambda"
-version = "1.0.85"
+version = "1.0.86"
 dependencies = [
  "async-trait",
  "aws-config",
