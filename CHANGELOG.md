@@ -1,3 +1,10 @@
+## [1.0.87](https://github.com/kayhannay/rust-kafka-lambda/compare/v1.0.86...v1.0.87) (2023-09-15)
+
+
+### Bug Fixes
+
+* **deps:** bump chrono from 0.4.30 to 0.4.31 ([ba3514e](https://github.com/kayhannay/rust-kafka-lambda/commit/ba3514e400151b84b47dcf47819638e847534b7b))
+
 ## [1.0.86](https://github.com/kayhannay/rust-kafka-lambda/compare/v1.0.85...v1.0.86) (2023-09-14)
 
 
