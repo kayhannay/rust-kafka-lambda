@@ -32,5 +32,5 @@ slog-envlogger = "2.2.0"
 lib-base64 = "2.0.4"
 
 [dev-dependencies]
-testcontainers = "0.14.0"
+testcontainers = "0.15.0"
 http = "0.2.9"
