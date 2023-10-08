@@ -12,10 +12,10 @@ serde = "1.0.188"
 serde_json = "1.0.107"
 serde_derive = "1.0.152"
 chrono = "0.4.31"
-aws-config = "0.55.3"
-aws-sdk-dynamodb = "0.28.0"
+aws-config = "0.56.1"
+aws-sdk-dynamodb = "0.31.1"
 lambda_runtime = "0.8.1"
-aws_lambda_events = "0.10.0"
+aws_lambda_events = "0.11.1"
 tokio = { version = "1.32.0", features = ["full"] }
 rdkafka = { version = "0.34.0", features = ["ssl", "gssapi-vendored"] }
 async-trait = "0.1.73"
@@ -32,5 +32,5 @@ slog-envlogger = "2.2.0"
 lib-base64 = "2.0.4"
 
 [dev-dependencies]
-testcontainers = "0.14.0"
+testcontainers = "0.15.0"
 http = "0.2.9"

@@ -16,7 +16,6 @@ use rdkafka::consumer::{Consumer, StreamConsumer};
 use rdkafka::producer::FutureProducer;
 use slog::{Drain, o, Logger};
 use testcontainers::clients;
-use testcontainers::images::kafka;
 use lib_base64::Base64;
 use rust_kafka_lambda::adapter::dynamodb_store_converted_product_service::DynamoDbStoreConvertedProductService;
 use rust_kafka_lambda::adapter::kafka_notify_update_product_service::KafkaNotifyUpdateProductService;
@@ -26,7 +25,7 @@ use rust_kafka_lambda::handler::lambda_kafka_event_handler::LambdaKafkaEventHand
 use rust_kafka_lambda;
 
 mod localstack;
-
+mod kafka;
 #[tokio::test]
 async fn happy_path() {
     let logger = initialize_logger();
@@ -338,8 +337,8 @@ fn create_lambda_event_from_file(topic: &str, product_id: &str, file_name: &str)
 
 fn create_lambda_event(topic: &str, product_id: &str, product_data: &Option<Product>) -> LambdaEvent<KafkaEvent> {
     let mut product = None;
-    let mut header: HashMap<String, Vec<u8>> = HashMap::new();
-    header.insert(String::from("sampleHeader"), String::from("sampleHeaderValue").into_bytes());
+    let mut header: HashMap<String, Vec<i8>> = HashMap::new();
+    header.insert(String::from("sampleHeader"), String::from("sampleHeaderValue").into_bytes().into_iter().map(|c| c as i8).collect::<_>());
     if product_data.is_some() {
         product = Some(serde_json::to_string(product_data.as_ref().unwrap()).unwrap().encode().unwrap());
     }
