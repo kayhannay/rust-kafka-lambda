@@ -1,3 +1,10 @@
+## [1.0.93](https://github.com/kayhannay/rust-kafka-lambda/compare/v1.0.92...v1.0.93) (2023-10-16)
+
+
+### Bug Fixes
+
+* **deps:** bump async-trait from 0.1.73 to 0.1.74 ([6f012a8](https://github.com/kayhannay/rust-kafka-lambda/commit/6f012a851afd8369c4edd94feb8d78514e7ac109))
+
 ## [1.0.92](https://github.com/kayhannay/rust-kafka-lambda/compare/v1.0.91...v1.0.92) (2023-10-16)
 
 
