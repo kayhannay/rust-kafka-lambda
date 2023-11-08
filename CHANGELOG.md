@@ -1,3 +1,10 @@
+## [1.0.101](https://github.com/kayhannay/rust-kafka-lambda/compare/v1.0.100...v1.0.101) (2023-11-08)
+
+
+### Bug Fixes
+
+* **deps:** bump lambda_runtime from 0.8.2 to 0.8.3 ([c6ae21c](https://github.com/kayhannay/rust-kafka-lambda/commit/c6ae21cf7bb58930da89abc9a98b7d1e5c12c742))
+
 ## [1.0.100](https://github.com/kayhannay/rust-kafka-lambda/compare/v1.0.99...v1.0.100) (2023-11-08)
 
 
