@@ -8,8 +8,7 @@ build-local:
 
 build:
 	mkdir -p target
-	docker pull $(DOCKER_IMAGE)
-	docker run --pull --rm \
+	docker run --pull always --rm \
     	-v ${PWD}:/code \
     	-v ${HOME}/.cargo/registry:/root/.cargo/registry \
     	-v ${HOME}/.cargo/git:/root/.cargo/git \
