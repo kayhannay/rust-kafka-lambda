@@ -308,15 +308,18 @@ async fn initialize_dynamodb(localstack_port: u16, dynamodb_table_name: &str) ->
     let ks = KeySchemaElement::builder()
         .attribute_name(key_name)
         .key_type(KeyType::Hash)
-        .build();
+        .build()
+        .expect("Could not create KeySchemaElement");
     let ad = AttributeDefinition::builder()
         .attribute_name(key_name)
         .attribute_type(ScalarAttributeType::S)
-        .build();
+        .build()
+        .expect("Could not create AttributeDefinition");
     let pt = ProvisionedThroughput::builder()
         .read_capacity_units(10)
         .write_capacity_units(5)
-        .build();
+        .build()
+        .expect("Could not create ProvisionedThroughput");
     dynamodb_client.create_table()
         .table_name(dynamodb_table_name)
         .key_schema(ks)
