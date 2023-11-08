@@ -458,7 +458,7 @@ version = "0.12.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2c2981b7ab5d084f06dfa6764e2b51347e836fe9559b549b332e451e6a8287ae"
 dependencies = [
- "base64",
+ "base64 0.21.4",
  "bytes",
  "chrono",
  "flate2",
@@ -486,6 +486,12 @@ dependencies = [
  "object",
  "rustc-demangle",
 ]
+
+[[package]]
+name = "base64"
+version = "0.20.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0ea22880d78093b0cbe17c89f64a7d457941e65759157ec6cb31a31d652b05e5"
 
 [[package]]
 name = "base64"
@@ -1156,14 +1162,16 @@ dependencies = [
 
 [[package]]
 name = "lambda_runtime"
-version = "0.8.2"
+version = "0.8.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8300e2e10ab2a49016584d9f248736a9da5ea819648df4c9d6c82fa2231fb510"
+checksum = "deca8f65d7ce9a8bfddebb49d7d91b22e788a59ca0c5190f26794ab80ed7a702"
 dependencies = [
  "async-stream",
+ "base64 0.20.0",
  "bytes",
  "futures",
  "http",
+ "http-body",
  "http-serde",
  "hyper",
  "lambda_runtime_api_client",
@@ -1692,7 +1700,7 @@ version = "1.0.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2d3987094b1d07b653b7dfdc3f70ce9a1da9c51ac18c1b06b662e4f9a0e9f4b2"
 dependencies = [
- "base64",
+ "base64 0.21.4",
 ]
 
 [[package]]
@@ -1853,7 +1861,7 @@ version = "4.2.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ba7e04e6ccab970073e94e691746e6e737de039317fb3ebf47c7e61598822434"
 dependencies = [
- "base64",
+ "base64 0.21.4",
  "serde",
 ]
 
@@ -1905,7 +1913,7 @@ version = "3.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1ca3b16a3d82c4088f343b7480a93550b3eabe1a358569c2dfe38bbcead07237"
 dependencies = [
- "base64",
+ "base64 0.21.4",
  "chrono",
  "hex",
  "indexmap 1.9.3",
