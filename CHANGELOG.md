@@ -1,3 +1,10 @@
+## [1.0.106](https://github.com/kayhannay/rust-kafka-lambda/compare/v1.0.105...v1.0.106) (2023-11-13)
+
+
+### Bug Fixes
+
+* **deps:** bump http from 0.2.10 to 0.2.11 ([19e2d28](https://github.com/kayhannay/rust-kafka-lambda/commit/19e2d2860320139b0baa38a17fa03dfbb1e59c2d))
+
 ## [1.0.105](https://github.com/kayhannay/rust-kafka-lambda/compare/v1.0.104...v1.0.105) (2023-11-10)
 
 
