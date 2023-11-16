@@ -129,7 +129,7 @@ dependencies = [
  "bytes",
  "fastrand",
  "hex",
- "http",
+ "http 0.2.11",
  "hyper",
  "ring 0.17.5",
  "time",
@@ -161,7 +161,7 @@ dependencies = [
  "aws-smithy-types",
  "aws-types",
  "bytes",
- "http",
+ "http 0.2.11",
  "http-body",
  "pin-project-lite",
  "tracing",
@@ -182,7 +182,7 @@ dependencies = [
  "aws-smithy-types",
  "aws-types",
  "fastrand",
- "http",
+ "http 0.2.11",
  "percent-encoding",
  "tracing",
  "uuid",
@@ -206,7 +206,7 @@ dependencies = [
  "aws-types",
  "bytes",
  "fastrand",
- "http",
+ "http 0.2.11",
  "regex",
  "tracing",
 ]
@@ -228,7 +228,7 @@ dependencies = [
  "aws-smithy-types",
  "aws-types",
  "bytes",
- "http",
+ "http 0.2.11",
  "regex",
  "tracing",
 ]
@@ -250,7 +250,7 @@ dependencies = [
  "aws-smithy-types",
  "aws-types",
  "bytes",
- "http",
+ "http 0.2.11",
  "regex",
  "tracing",
 ]
@@ -273,7 +273,7 @@ dependencies = [
  "aws-smithy-types",
  "aws-smithy-xml",
  "aws-types",
- "http",
+ "http 0.2.11",
  "regex",
  "tracing",
 ]
@@ -291,7 +291,7 @@ dependencies = [
  "form_urlencoded",
  "hex",
  "hmac",
- "http",
+ "http 0.2.11",
  "once_cell",
  "percent-encoding",
  "regex",
@@ -322,7 +322,7 @@ dependencies = [
  "bytes",
  "bytes-utils",
  "futures-core",
- "http",
+ "http 0.2.11",
  "http-body",
  "once_cell",
  "percent-encoding",
@@ -362,7 +362,7 @@ dependencies = [
  "aws-smithy-types",
  "bytes",
  "fastrand",
- "http",
+ "http 0.2.11",
  "http-body",
  "hyper",
  "hyper-rustls",
@@ -383,7 +383,7 @@ dependencies = [
  "aws-smithy-async",
  "aws-smithy-types",
  "bytes",
- "http",
+ "http 0.2.11",
  "pin-project-lite",
  "tokio",
  "tracing",
@@ -400,7 +400,7 @@ dependencies = [
  "bytes",
  "bytes-utils",
  "futures-core",
- "http",
+ "http 0.2.11",
  "http-body",
  "itoa",
  "num-integer",
@@ -432,7 +432,7 @@ dependencies = [
  "aws-smithy-async",
  "aws-smithy-runtime-api",
  "aws-smithy-types",
- "http",
+ "http 0.2.11",
  "rustc_version",
  "tracing",
 ]
@@ -447,7 +447,7 @@ dependencies = [
  "bytes",
  "chrono",
  "flate2",
- "http",
+ "http 0.2.11",
  "http-body",
  "http-serde",
  "query_map",
@@ -930,7 +930,7 @@ dependencies = [
  "futures-core",
  "futures-sink",
  "futures-util",
- "http",
+ "http 0.2.11",
  "indexmap 1.9.3",
  "slab",
  "tokio",
@@ -998,13 +998,24 @@ dependencies = [
 ]
 
 [[package]]
+name = "http"
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b32afd38673a8016f7c9ae69e5af41a58f81b1d31689040f2f1959594ce194ea"
+dependencies = [
+ "bytes",
+ "fnv",
+ "itoa",
+]
+
+[[package]]
 name = "http-body"
 version = "0.4.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d5f38f16d184e36f2408a55281cd658ecbd3ca05cce6d6510a176eca393e26d1"
 dependencies = [
  "bytes",
- "http",
+ "http 0.2.11",
  "pin-project-lite",
 ]
 
@@ -1014,7 +1025,7 @@ version = "1.1.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6f560b665ad9f1572cfcaf034f7fb84338a7ce945216d64a90fd81f046a3caee"
 dependencies = [
- "http",
+ "http 0.2.11",
  "serde",
 ]
 
@@ -1041,7 +1052,7 @@ dependencies = [
  "futures-core",
  "futures-util",
  "h2",
- "http",
+ "http 0.2.11",
  "http-body",
  "httparse",
  "httpdate",
@@ -1061,7 +1072,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8d78e1e73ec14cf7375674f74d7dde185c8206fd9dea6fb6295e8a98098aaa97"
 dependencies = [
  "futures-util",
- "http",
+ "http 0.2.11",
  "hyper",
  "log",
  "rustls",
@@ -1155,7 +1166,7 @@ dependencies = [
  "base64 0.20.0",
  "bytes",
  "futures",
- "http",
+ "http 0.2.11",
  "http-body",
  "http-serde",
  "hyper",
@@ -1175,7 +1186,7 @@ version = "0.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "690c5ae01f3acac8c9c3348b556fc443054e9b7f1deaf53e9ebab716282bf0ed"
 dependencies = [
- "http",
+ "http 0.2.11",
  "hyper",
  "tokio",
  "tower-service",
@@ -1624,7 +1635,7 @@ dependencies = [
 
 [[package]]
 name = "rust_kafka_lambda"
-version = "1.0.108"
+version = "1.0.109"
 dependencies = [
  "async-trait",
  "aws-config",
@@ -1632,7 +1643,7 @@ dependencies = [
  "aws_lambda_events",
  "chrono",
  "futures",
- "http",
+ "http 1.0.0",
  "lambda_runtime",
  "lib-base64",
  "log",
