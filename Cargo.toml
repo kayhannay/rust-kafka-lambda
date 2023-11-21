@@ -13,7 +13,7 @@ serde_json = "1.0.108"
 serde_derive = "1.0.152"
 chrono = "0.4.31"
 aws-config = "0.57.2"
-aws-sdk-dynamodb = "0.36.0"
+aws-sdk-dynamodb = "0.39.0"
 lambda_runtime = "0.8.3"
 aws_lambda_events = "0.12.1"
 tokio = { version = "1.34.0", features = ["full"] }
