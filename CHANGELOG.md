@@ -1,3 +1,10 @@
+## [1.0.115](https://github.com/kayhannay/rust-kafka-lambda/compare/v1.0.114...v1.0.115) (2023-12-25)
+
+
+### Bug Fixes
+
+* **deps:** bump futures from 0.3.29 to 0.3.30 ([be29d7a](https://github.com/kayhannay/rust-kafka-lambda/commit/be29d7a97ad11cfdfdaf88fafbaec0bd30abf6b3))
+
 ## [1.0.114](https://github.com/kayhannay/rust-kafka-lambda/compare/v1.0.113...v1.0.114) (2023-12-21)
 
 
