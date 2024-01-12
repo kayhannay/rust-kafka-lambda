@@ -17,7 +17,7 @@ aws-sdk-dynamodb = "0.36.0"
 lambda_runtime = "0.8.3"
 aws_lambda_events = "0.13.0"
 tokio = { version = "1.35.1", features = ["full"] }
-rdkafka = { version = "0.36.0", features = ["ssl", "gssapi-vendored"] }
+rdkafka = { version = "0.36.1", features = ["ssl", "gssapi-vendored"] }
 async-trait = "0.1.77"
 strum_macros = "0.25.3"
 futures = "0.3.30"
