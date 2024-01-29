@@ -1,3 +1,10 @@
+## [1.0.130](https://github.com/kayhannay/rust-kafka-lambda/compare/v1.0.129...v1.0.130) (2024-01-29)
+
+
+### Bug Fixes
+
+* **deps:** bump strum_macros from 0.25.3 to 0.26.1 ([a7de9df](https://github.com/kayhannay/rust-kafka-lambda/commit/a7de9dfaf0384aa95d90c0861d5ca42bb16c5cb2))
+
 ## [1.0.129](https://github.com/kayhannay/rust-kafka-lambda/compare/v1.0.128...v1.0.129) (2024-01-29)
 
 
