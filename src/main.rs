@@ -4,6 +4,7 @@ extern crate serde;
 extern crate serde_json;
 
 use std::env;
+use aws_config::BehaviorVersion;
 use aws_lambda_events::kafka::KafkaEvent;
 
 use aws_sdk_dynamodb::Client;
@@ -22,7 +23,9 @@ async fn main() -> Result<(), Error> {
     let logger = initialize_logger();
 
     info!(logger, "Create application context ...");
-    let shared_config = aws_config::load_from_env().await;
+    let shared_config = aws_config::defaults(BehaviorVersion::v2023_11_09())
+        .load()
+        .await;
     let client = Client::new(&shared_config);
     let table_name = env::var("PRODUCT_TABLE_NAME").expect("Variable PRODUCT_TABLE_NAME is not set!");
 

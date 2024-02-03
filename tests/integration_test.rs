@@ -1,6 +1,8 @@
 use std::collections::HashMap;
 use std::fs;
+use std::sync::Arc;
 use std::time::Duration;
+use aws_config::BehaviorVersion;
 
 use aws_config::meta::region::RegionProviderChain;
 use aws_lambda_events::encodings::MillisecondTimestamp;
@@ -10,7 +12,8 @@ use aws_sdk_dynamodb::config::Credentials;
 use aws_sdk_dynamodb::types::{AttributeDefinition, AttributeValue, KeySchemaElement, KeyType, ProvisionedThroughput, ScalarAttributeType};
 use chrono::DateTime;
 use futures::StreamExt;
-use lambda_runtime::LambdaEvent;
+use http::HeaderMap;
+use lambda_runtime::{Config, Context, LambdaEvent};
 use rdkafka::{ClientConfig, Message};
 use rdkafka::consumer::{Consumer, StreamConsumer};
 use rdkafka::producer::FutureProducer;
@@ -37,7 +40,7 @@ async fn happy_path() {
         "127.0.0.1:{}",
         kafka_node.get_host_port_ipv4(kafka::KAFKA_PORT)
     );
-
+    println!("Bootstrap servers: {}", bootstrap_servers);
 
     // given
     let topic = "test-topic";
@@ -299,8 +302,11 @@ async fn initialize_dynamodb(localstack_port: u16, dynamodb_table_name: &str) ->
     println!("Initialize Localstack and DynamoDB");
 
     let region_provider = RegionProviderChain::default_provider().or_else("eu-central-1");
-    let shared_config = aws_config::from_env().region(region_provider).credentials_provider(Credentials::new("example", "example", None, None, "example")).load().await;
-    //let shared_config = aws_config::load_from_env().await;
+    let shared_config = aws_config::defaults(BehaviorVersion::v2023_11_09())
+        .region(region_provider)
+        .credentials_provider(Credentials::new("example", "example", None, None, "example"))
+        .load()
+        .await;
     let mut dynamodb_client_builder = aws_sdk_dynamodb::config::Builder::from(&shared_config);
     dynamodb_client_builder = dynamodb_client_builder.endpoint_url(&format!("http://127.0.0.1:{}/", localstack_port));
     let dynamodb_client = Client::from_conf(dynamodb_client_builder.build());
@@ -340,8 +346,8 @@ fn create_lambda_event_from_file(topic: &str, product_id: &str, file_name: &str)
 
 fn create_lambda_event(topic: &str, product_id: &str, product_data: &Option<Product>) -> LambdaEvent<KafkaEvent> {
     let mut product = None;
-    let mut header: HashMap<String, Vec<i8>> = HashMap::new();
-    header.insert(String::from("sampleHeader"), String::from("sampleHeaderValue").into_bytes().into_iter().map(|c| c as i8).collect::<_>());
+    let mut record_header: HashMap<String, Vec<i8>> = HashMap::new();
+    record_header.insert(String::from("sampleHeader"), String::from("sampleHeaderValue").into_bytes().into_iter().map(|c| c as i8).collect::<_>());
     if product_data.is_some() {
         product = Some(serde_json::to_string(product_data.as_ref().unwrap()).unwrap().encode().unwrap());
     }
@@ -353,7 +359,7 @@ fn create_lambda_event(topic: &str, product_id: &str, product_data: &Option<Prod
         timestamp_type: None,
         key: Some(product_id.to_string().encode().unwrap()),
         value: product,
-        headers: vec!(header),
+        headers: vec!(record_header),
     };
     let kafka_event = KafkaEvent {
         event_source: None,
@@ -361,9 +367,13 @@ fn create_lambda_event(topic: &str, product_id: &str, product_data: &Option<Prod
         records: HashMap::from([(topic.to_string(), vec!(kafka_record))]),
         bootstrap_servers: None
     };
+    let config = Arc::new(Config::default());
+    let mut context_header = HeaderMap::new();
+    context_header.insert("lambda-runtime-deadline-ms", "1000".parse().unwrap());
+    let context = Context::new("some_req", config, &context_header).unwrap();
     let lambda_event = LambdaEvent {
         payload: kafka_event,
-        context: Default::default()
+        context,
     };
 
     return lambda_event;
