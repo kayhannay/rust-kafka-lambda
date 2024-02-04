@@ -1,3 +1,10 @@
+## [1.0.134](https://github.com/kayhannay/rust-kafka-lambda/compare/v1.0.133...v1.0.134) (2024-02-04)
+
+
+### Bug Fixes
+
+* use correct build artifact for zipping ([08aa3d5](https://github.com/kayhannay/rust-kafka-lambda/commit/08aa3d57f669ac6c709d975dc0c37ceee507257d))
+
 ## [1.0.133](https://github.com/kayhannay/rust-kafka-lambda/compare/v1.0.132...v1.0.133) (2024-02-04)
 
 
