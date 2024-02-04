@@ -19,18 +19,17 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - uses: wagoid/commitlint-github-action@v5
         if: (github.actor != 'dependabot[bot]') && (contains(github.head_ref, 'dependabot/') == false)
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
       - run: |
           sudo apt update
           sudo apt install -y libsasl2-dev
-      - run: make test
+      - run: cargo test
   merge:
     name: merge
     needs:
