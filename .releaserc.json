@@ -10,7 +10,7 @@
       "@semantic-release/exec",
       {
         "prepareCmd": "sed -i 's/^version = .*/version = \"${nextRelease.version}\"/g' Cargo.toml; git add Cargo.toml",
-        "publishCmd": "cargo lambda build --release --compiler cross; zip -j target/bootstrap.zip target/lambda/release/bootstrap"
+        "publishCmd": "cargo lambda build --release --compiler cross; zip -j target/bootstrap.zip target/rust_kafka_lambda/bootstrap"
       }
     ],
     [
