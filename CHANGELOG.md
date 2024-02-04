@@ -1,3 +1,11 @@
+## [1.0.133](https://github.com/kayhannay/rust-kafka-lambda/compare/v1.0.132...v1.0.133) (2024-02-04)
+
+
+### Bug Fixes
+
+* install cross in a separate step ([b3ce45a](https://github.com/kayhannay/rust-kafka-lambda/commit/b3ce45a0b9e383b24cceaf93397a812d2b7ac8c6))
+* use cargo lambda and cross for build ([1b5477a](https://github.com/kayhannay/rust-kafka-lambda/commit/1b5477af9a11c4d3c9458d5b8b7ed65a5f070d30))
+
 ## [1.0.132](https://github.com/kayhannay/rust-kafka-lambda/compare/v1.0.131...v1.0.132) (2024-02-03)
 
 
