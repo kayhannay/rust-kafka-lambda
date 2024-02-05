@@ -1,3 +1,10 @@
+## [1.0.138](https://github.com/kayhannay/rust-kafka-lambda/compare/v1.0.137...v1.0.138) (2024-02-05)
+
+
+### Bug Fixes
+
+* **deps:** bump h2 from 0.3.24 to 0.4.2 ([71af3e4](https://github.com/kayhannay/rust-kafka-lambda/commit/71af3e46c4a999bc0f3992d6c8dc7986d3ebf717))
+
 ## [1.0.137](https://github.com/kayhannay/rust-kafka-lambda/compare/v1.0.136...v1.0.137) (2024-02-05)
 
 
