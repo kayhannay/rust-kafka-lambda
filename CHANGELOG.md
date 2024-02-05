@@ -1,3 +1,10 @@
+## [1.0.137](https://github.com/kayhannay/rust-kafka-lambda/compare/v1.0.136...v1.0.137) (2024-02-05)
+
+
+### Bug Fixes
+
+* add cargo files as assets for semantic release git plugin ([d23ba8a](https://github.com/kayhannay/rust-kafka-lambda/commit/d23ba8a4d343d0944366326530b54a4db1965350))
+
 ## [1.0.136](https://github.com/kayhannay/rust-kafka-lambda/compare/v1.0.135...v1.0.136) (2024-02-05)
 
 
