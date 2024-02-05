@@ -347,7 +347,7 @@ dependencies = [
  "aws-smithy-types",
  "bytes",
  "fastrand",
- "h2",
+ "h2 0.3.24",
  "http 0.2.11",
  "http-body 0.4.5",
  "hyper 0.14.27",
@@ -919,6 +919,25 @@ dependencies = [
 ]
 
 [[package]]
+name = "h2"
+version = "0.4.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "31d030e59af851932b72ceebadf4a2b5986dba4c3b99dd2493f8273a0f151943"
+dependencies = [
+ "bytes",
+ "fnv",
+ "futures-core",
+ "futures-sink",
+ "futures-util",
+ "http 1.0.0",
+ "indexmap 2.0.2",
+ "slab",
+ "tokio",
+ "tokio-util",
+ "tracing",
+]
+
+[[package]]
 name = "hashbrown"
 version = "0.12.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1054,7 +1073,7 @@ dependencies = [
  "futures-channel",
  "futures-core",
  "futures-util",
- "h2",
+ "h2 0.3.24",
  "http 0.2.11",
  "http-body 0.4.5",
  "httparse",
@@ -1699,7 +1718,7 @@ dependencies = [
  "aws_lambda_events",
  "chrono",
  "futures",
- "h2",
+ "h2 0.4.2",
  "http 1.0.0",
  "lambda_runtime",
  "lib-base64",
