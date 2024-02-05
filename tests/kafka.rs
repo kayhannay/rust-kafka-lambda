@@ -1,8 +1,8 @@
+use std::collections::HashMap;
 use testcontainers::{
     core::{ContainerState, ExecCommand, WaitFor},
     Image, ImageArgs,
 };
-use std::collections::HashMap;
 
 const NAME: &str = "confluentinc/cp-kafka";
 const TAG: &str = "6.1.1";
@@ -30,7 +30,7 @@ zookeeper-server-start zookeeper.properties &
 /etc/confluent/docker/launch"#,
                 ),
             ]
-                .into_iter(),
+            .into_iter(),
         )
     }
 }

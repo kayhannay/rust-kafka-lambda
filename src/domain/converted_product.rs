@@ -1,12 +1,8 @@
-use std::collections::HashSet;
 use chrono::{DateTime, FixedOffset};
-use serde::{Serialize,Deserialize};
+use serde::{Deserialize, Serialize};
+use std::collections::HashSet;
 
-#[derive(Default)]
-#[derive(Serialize)]
-#[derive(Deserialize)]
-#[derive(PartialEq)]
-#[derive(Debug)]
+#[derive(Default, Serialize, Deserialize, PartialEq, Debug)]
 pub struct ConvertedProduct {
     #[serde(rename = "productId")]
     pub product_id: String,
@@ -19,11 +15,7 @@ pub struct ConvertedProduct {
     pub dimensions: Option<Dimensions>,
 }
 
-#[derive(Default)]
-#[derive(Serialize)]
-#[derive(Deserialize)]
-#[derive(PartialEq)]
-#[derive(Debug)]
+#[derive(Default, Serialize, Deserialize, PartialEq, Debug)]
 pub struct Dimensions {
     pub length: Option<f64>,
     pub width: Option<f64>,

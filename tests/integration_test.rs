@@ -1,34 +1,37 @@
+use aws_config::BehaviorVersion;
 use std::collections::HashMap;
 use std::fs;
 use std::sync::Arc;
 use std::time::Duration;
-use aws_config::BehaviorVersion;
 
 use aws_config::meta::region::RegionProviderChain;
 use aws_lambda_events::encodings::MillisecondTimestamp;
 use aws_lambda_events::event::kafka::{KafkaEvent, KafkaRecord};
-use aws_sdk_dynamodb::Client;
 use aws_sdk_dynamodb::config::Credentials;
-use aws_sdk_dynamodb::types::{AttributeDefinition, AttributeValue, KeySchemaElement, KeyType, ProvisionedThroughput, ScalarAttributeType};
+use aws_sdk_dynamodb::types::{
+    AttributeDefinition, AttributeValue, KeySchemaElement, KeyType, ProvisionedThroughput,
+    ScalarAttributeType,
+};
+use aws_sdk_dynamodb::Client;
 use chrono::DateTime;
 use futures::StreamExt;
 use http::HeaderMap;
 use lambda_runtime::{Config, Context, LambdaEvent};
-use rdkafka::{ClientConfig, Message};
+use lib_base64::Base64;
 use rdkafka::consumer::{Consumer, StreamConsumer};
 use rdkafka::producer::FutureProducer;
-use slog::{Drain, o, Logger};
-use testcontainers::clients;
-use lib_base64::Base64;
+use rdkafka::{ClientConfig, Message};
+use rust_kafka_lambda;
 use rust_kafka_lambda::adapter::dynamodb_store_converted_product_service::DynamoDbStoreConvertedProductService;
 use rust_kafka_lambda::adapter::kafka_notify_update_product_service::KafkaNotifyUpdateProductService;
 use rust_kafka_lambda::business::save_converted_product_use_case::SaveConvertedProductUseCase;
 use rust_kafka_lambda::domain::product::Product;
 use rust_kafka_lambda::handler::lambda_kafka_event_handler::LambdaKafkaEventHandler;
-use rust_kafka_lambda;
+use slog::{o, Drain, Logger};
+use testcontainers::clients;
 
-mod localstack;
 mod kafka;
+mod localstack;
 #[tokio::test]
 async fn happy_path() {
     let logger = initialize_logger();
@@ -59,9 +62,15 @@ async fn happy_path() {
         log: Logger::new(&logger, o!("logger" => "LambdaKafkaEventHandler")),
         save_converted_product_use_case: SaveConvertedProductUseCase {
             log: Logger::new(&logger, o!("logger" => "SaveConvertedProductUseCase")),
-            store_converted_product_service: DynamoDbStoreConvertedProductService { dynamo_db_client: client, table_name: dynamodb_table_name.to_string() },
-            notify_update_product_service: KafkaNotifyUpdateProductService { producer, topic_name: topic.to_string() }
-        }
+            store_converted_product_service: DynamoDbStoreConvertedProductService {
+                dynamo_db_client: client,
+                table_name: dynamodb_table_name.to_string(),
+            },
+            notify_update_product_service: KafkaNotifyUpdateProductService {
+                producer,
+                topic_name: topic.to_string(),
+            },
+        },
     };
 
     println!("Prepare test data");
@@ -69,17 +78,43 @@ async fn happy_path() {
 
     // when
     println!("Call lambda handler");
-    lambda_event_handler.handle_lambda_kafka_event(lambda_event).await.expect("TODO: panic message");
-
+    lambda_event_handler
+        .handle_lambda_kafka_event(lambda_event)
+        .await
+        .expect("TODO: panic message");
 
     // then
 
     //## DynamoDB
     println!("Check result in DynamoDB");
-    let item_output = check_client.get_item().table_name(dynamodb_table_name).key("id", AttributeValue::S("p1".to_string())).send().await.expect("DB error");
-    assert_eq!("p1", item_output.item().expect("Product not found in database!").get("id").unwrap().as_s().unwrap());
+    let item_output = check_client
+        .get_item()
+        .table_name(dynamodb_table_name)
+        .key("id", AttributeValue::S("p1".to_string()))
+        .send()
+        .await
+        .expect("DB error");
+    assert_eq!(
+        "p1",
+        item_output
+            .item()
+            .expect("Product not found in database!")
+            .get("id")
+            .unwrap()
+            .as_s()
+            .unwrap()
+    );
     //assert_eq!("{}", item_output.item().unwrap().get("data").unwrap().as_s().unwrap());
-    println!("Converted product: {}", item_output.item().unwrap().get("data").unwrap().as_s().unwrap());
+    println!(
+        "Converted product: {}",
+        item_output
+            .item()
+            .unwrap()
+            .get("data")
+            .unwrap()
+            .as_s()
+            .unwrap()
+    );
 
     //## Kafka
     println!("Check result in Kafka topic");
@@ -100,7 +135,6 @@ async fn happy_path() {
                 .unwrap()
         );
     }
-
 }
 
 #[tokio::test]
@@ -114,7 +148,6 @@ async fn delete_product_tombstone() {
         "127.0.0.1:{}",
         kafka_node.get_host_port_ipv4(kafka::KAFKA_PORT)
     );
-
 
     // given
     let topic = "test-topic";
@@ -133,9 +166,15 @@ async fn delete_product_tombstone() {
         log: Logger::new(&logger, o!("logger" => "LambdaKafkaEventHandler")),
         save_converted_product_use_case: SaveConvertedProductUseCase {
             log: Logger::new(&logger, o!("logger" => "SaveConvertedProductUseCase")),
-            store_converted_product_service: DynamoDbStoreConvertedProductService { dynamo_db_client: client, table_name: dynamodb_table_name.to_string() },
-            notify_update_product_service: KafkaNotifyUpdateProductService { producer, topic_name: topic.to_string() }
-        }
+            store_converted_product_service: DynamoDbStoreConvertedProductService {
+                dynamo_db_client: client,
+                table_name: dynamodb_table_name.to_string(),
+            },
+            notify_update_product_service: KafkaNotifyUpdateProductService {
+                producer,
+                topic_name: topic.to_string(),
+            },
+        },
     };
 
     println!("Prepare test data");
@@ -143,14 +182,31 @@ async fn delete_product_tombstone() {
 
     // when
     println!("Call lambda handler");
-    lambda_event_handler.handle_lambda_kafka_event(lambda_event).await.expect("TODO: panic message");
-
+    lambda_event_handler
+        .handle_lambda_kafka_event(lambda_event)
+        .await
+        .expect("TODO: panic message");
 
     // then
     //## DynamoDB
     println!("Check result in DynamoDB");
-    let item_output = check_client.get_item().table_name(dynamodb_table_name).key("id", AttributeValue::S("p1".to_string())).send().await.expect("f");
-    assert_eq!("p1", item_output.item().expect("Product not found in database!").get("id").unwrap().as_s().unwrap());
+    let item_output = check_client
+        .get_item()
+        .table_name(dynamodb_table_name)
+        .key("id", AttributeValue::S("p1".to_string()))
+        .send()
+        .await
+        .expect("f");
+    assert_eq!(
+        "p1",
+        item_output
+            .item()
+            .expect("Product not found in database!")
+            .get("id")
+            .unwrap()
+            .as_s()
+            .unwrap()
+    );
 
     //## Kafka
     println!("Check result in Kafka topic");
@@ -177,12 +233,21 @@ async fn delete_product_tombstone() {
 
     // when
     println!("Call lambda handler");
-    lambda_event_handler.handle_lambda_kafka_event(lambda_event).await.expect("TODO: panic message");
+    lambda_event_handler
+        .handle_lambda_kafka_event(lambda_event)
+        .await
+        .expect("TODO: panic message");
 
     // then
     //## DynamoDB
     println!("Check result in DynamoDB");
-    let item_output = check_client.get_item().table_name(dynamodb_table_name).key("id", AttributeValue::S("p1".to_string())).send().await.expect("f");
+    let item_output = check_client
+        .get_item()
+        .table_name(dynamodb_table_name)
+        .key("id", AttributeValue::S("p1".to_string()))
+        .send()
+        .await
+        .expect("f");
     assert_eq!(None, item_output.item());
 
     //## Kafka
@@ -203,9 +268,7 @@ async fn delete_product_tombstone() {
                 .unwrap()
                 .unwrap()
         );
-    
     }
-
 }
 
 #[tokio::test]
@@ -219,7 +282,6 @@ async fn change_detection_save() {
         "127.0.0.1:{}",
         kafka_node.get_host_port_ipv4(kafka::KAFKA_PORT)
     );
-
 
     // given
     let topic = "test-topic";
@@ -237,9 +299,15 @@ async fn change_detection_save() {
         log: Logger::new(&logger, o!("logger" => "LambdaKafkaEventHandler")),
         save_converted_product_use_case: SaveConvertedProductUseCase {
             log: Logger::new(&logger, o!("logger" => "SaveConvertedProductUseCase")),
-            store_converted_product_service: DynamoDbStoreConvertedProductService { dynamo_db_client: client, table_name: dynamodb_table_name.to_string() },
-            notify_update_product_service: KafkaNotifyUpdateProductService { producer, topic_name: topic.to_string() }
-        }
+            store_converted_product_service: DynamoDbStoreConvertedProductService {
+                dynamo_db_client: client,
+                table_name: dynamodb_table_name.to_string(),
+            },
+            notify_update_product_service: KafkaNotifyUpdateProductService {
+                producer,
+                topic_name: topic.to_string(),
+            },
+        },
     };
 
     println!("Prepare test data");
@@ -247,16 +315,31 @@ async fn change_detection_save() {
 
     // when
     println!("Call lambda handler");
-    lambda_event_handler.handle_lambda_kafka_event(lambda_event.clone()).await.expect("TODO: panic message");
-    lambda_event_handler.handle_lambda_kafka_event(lambda_event).await.expect("TODO: panic message");
+    lambda_event_handler
+        .handle_lambda_kafka_event(lambda_event.clone())
+        .await
+        .expect("TODO: panic message");
+    lambda_event_handler
+        .handle_lambda_kafka_event(lambda_event)
+        .await
+        .expect("TODO: panic message");
 
     // then
     //## Kafka
     println!("Check result in Kafka topic");
     let mut message_stream = consumer.stream();
-    assert_eq!(true, tokio::time::timeout(Duration::from_secs(5), message_stream.next()).await.is_ok());
-    assert_eq!(false, tokio::time::timeout(Duration::from_secs(5), message_stream.next()).await.is_ok());
-
+    assert_eq!(
+        true,
+        tokio::time::timeout(Duration::from_secs(5), message_stream.next())
+            .await
+            .is_ok()
+    );
+    assert_eq!(
+        false,
+        tokio::time::timeout(Duration::from_secs(5), message_stream.next())
+            .await
+            .is_ok()
+    );
 }
 
 fn initialize_logger() -> Logger {
@@ -304,11 +387,14 @@ async fn initialize_dynamodb(localstack_port: u16, dynamodb_table_name: &str) ->
     let region_provider = RegionProviderChain::default_provider().or_else("eu-central-1");
     let shared_config = aws_config::defaults(BehaviorVersion::v2023_11_09())
         .region(region_provider)
-        .credentials_provider(Credentials::new("example", "example", None, None, "example"))
+        .credentials_provider(Credentials::new(
+            "example", "example", None, None, "example",
+        ))
         .load()
         .await;
     let mut dynamodb_client_builder = aws_sdk_dynamodb::config::Builder::from(&shared_config);
-    dynamodb_client_builder = dynamodb_client_builder.endpoint_url(&format!("http://127.0.0.1:{}/", localstack_port));
+    dynamodb_client_builder =
+        dynamodb_client_builder.endpoint_url(&format!("http://127.0.0.1:{}/", localstack_port));
     let dynamodb_client = Client::from_conf(dynamodb_client_builder.build());
     let key_name = "id";
     let ks = KeySchemaElement::builder()
@@ -326,30 +412,51 @@ async fn initialize_dynamodb(localstack_port: u16, dynamodb_table_name: &str) ->
         .write_capacity_units(5)
         .build()
         .expect("Could not create ProvisionedThroughput");
-    dynamodb_client.create_table()
+    dynamodb_client
+        .create_table()
         .table_name(dynamodb_table_name)
         .key_schema(ks)
         .attribute_definitions(ad)
         .provisioned_throughput(pt)
-        .send().await.expect("Could not create table");
+        .send()
+        .await
+        .expect("Could not create table");
 
     return dynamodb_client;
 }
 
-fn create_lambda_event_from_file(topic: &str, product_id: &str, file_name: &str) -> LambdaEvent<KafkaEvent> {
-    let file = fs::File::open(file_name)
-        .expect("file should open read only");
-    let product: Product = serde_json::from_reader(file)
-        .expect("file should be proper JSON");
+fn create_lambda_event_from_file(
+    topic: &str,
+    product_id: &str,
+    file_name: &str,
+) -> LambdaEvent<KafkaEvent> {
+    let file = fs::File::open(file_name).expect("file should open read only");
+    let product: Product = serde_json::from_reader(file).expect("file should be proper JSON");
     create_lambda_event(topic, product_id, &Some(product))
 }
 
-fn create_lambda_event(topic: &str, product_id: &str, product_data: &Option<Product>) -> LambdaEvent<KafkaEvent> {
+fn create_lambda_event(
+    topic: &str,
+    product_id: &str,
+    product_data: &Option<Product>,
+) -> LambdaEvent<KafkaEvent> {
     let mut product = None;
     let mut record_header: HashMap<String, Vec<i8>> = HashMap::new();
-    record_header.insert(String::from("sampleHeader"), String::from("sampleHeaderValue").into_bytes().into_iter().map(|c| c as i8).collect::<_>());
+    record_header.insert(
+        String::from("sampleHeader"),
+        String::from("sampleHeaderValue")
+            .into_bytes()
+            .into_iter()
+            .map(|c| c as i8)
+            .collect::<_>(),
+    );
     if product_data.is_some() {
-        product = Some(serde_json::to_string(product_data.as_ref().unwrap()).unwrap().encode().unwrap());
+        product = Some(
+            serde_json::to_string(product_data.as_ref().unwrap())
+                .unwrap()
+                .encode()
+                .unwrap(),
+        );
     }
     let kafka_record = KafkaRecord {
         topic: Some(topic.to_string()),
@@ -359,13 +466,13 @@ fn create_lambda_event(topic: &str, product_id: &str, product_data: &Option<Prod
         timestamp_type: None,
         key: Some(product_id.to_string().encode().unwrap()),
         value: product,
-        headers: vec!(record_header),
+        headers: vec![record_header],
     };
     let kafka_event = KafkaEvent {
         event_source: None,
         event_source_arn: None,
-        records: HashMap::from([(topic.to_string(), vec!(kafka_record))]),
-        bootstrap_servers: None
+        records: HashMap::from([(topic.to_string(), vec![kafka_record])]),
+        bootstrap_servers: None,
     };
     let config = Arc::new(Config::default());
     let mut context_header = HeaderMap::new();
