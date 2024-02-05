@@ -39,3 +39,4 @@ jobs:
             @semantic-release-cargo/semantic-release-cargo
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          CARGO_REGISTRY_TOKEN: "unused"
