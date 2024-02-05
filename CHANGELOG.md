@@ -1,3 +1,12 @@
+## [1.0.136](https://github.com/kayhannay/rust-kafka-lambda/compare/v1.0.135...v1.0.136) (2024-02-05)
+
+
+### Bug Fixes
+
+* add cargo plugin for semantic release ([74985e9](https://github.com/kayhannay/rust-kafka-lambda/commit/74985e9ac8ec3ce302d53f24083e662022386086))
+* disable publishing and set crates.io token ([c8ca9df](https://github.com/kayhannay/rust-kafka-lambda/commit/c8ca9dfcb00c1e8645a7c52f18293d3dbd04d694))
+* update dependencies ([a35e323](https://github.com/kayhannay/rust-kafka-lambda/commit/a35e323df05052cba6101aa99f2fe48cf746ae4d))
+
 ## [1.0.135](https://github.com/kayhannay/rust-kafka-lambda/compare/v1.0.134...v1.0.135) (2024-02-04)
 
 
