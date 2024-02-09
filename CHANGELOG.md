@@ -1,3 +1,10 @@
+## [1.0.140](https://github.com/kayhannay/rust-kafka-lambda/compare/v1.0.139...v1.0.140) (2024-02-09)
+
+
+### Bug Fixes
+
+* **deps:** bump aws-sdk-dynamodb from 1.13.1 to 1.14.0 ([87e8ca0](https://github.com/kayhannay/rust-kafka-lambda/commit/87e8ca0b0a4d355b5c406f83b4ebcceb0102d98f))
+
 ## [1.0.139](https://github.com/kayhannay/rust-kafka-lambda/compare/v1.0.138...v1.0.139) (2024-02-09)
 
 
