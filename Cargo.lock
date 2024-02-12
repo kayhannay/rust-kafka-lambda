@@ -1710,7 +1710,7 @@ dependencies = [
 
 [[package]]
 name = "rust_kafka_lambda"
-version = "1.0.140"
+version = "1.0.141"
 dependencies = [
  "async-trait",
  "aws-config",
