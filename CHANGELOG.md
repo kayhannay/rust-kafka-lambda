@@ -1,3 +1,10 @@
+## [1.0.144](https://github.com/kayhannay/rust-kafka-lambda/compare/v1.0.143...v1.0.144) (2024-02-19)
+
+
+### Bug Fixes
+
+* **deps:** bump slog-term from 2.9.0 to 2.9.1 ([08532c6](https://github.com/kayhannay/rust-kafka-lambda/commit/08532c6cd8eccab0d78addc39050ae7a55056b43))
+
 ## [1.0.143](https://github.com/kayhannay/rust-kafka-lambda/compare/v1.0.142...v1.0.143) (2024-02-14)
 
 
