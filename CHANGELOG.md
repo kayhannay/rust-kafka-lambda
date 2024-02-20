@@ -1,3 +1,10 @@
+## [1.0.145](https://github.com/kayhannay/rust-kafka-lambda/compare/v1.0.144...v1.0.145) (2024-02-20)
+
+
+### Bug Fixes
+
+* **deps:** bump serde_json from 1.0.113 to 1.0.114 ([087c31e](https://github.com/kayhannay/rust-kafka-lambda/commit/087c31e0463a94715d35ea7fb118c923764f6cad))
+
 ## [1.0.144](https://github.com/kayhannay/rust-kafka-lambda/compare/v1.0.143...v1.0.144) (2024-02-19)
 
 
