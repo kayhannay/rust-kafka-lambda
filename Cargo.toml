@@ -1,6 +1,6 @@
 [package]
 name = "rust_kafka_lambda"
-version = "1.0.146"
+version = "1.0.147"
 edition = "2021"
 publish = false
 
