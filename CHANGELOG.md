@@ -1,3 +1,10 @@
+## [1.0.150](https://github.com/kayhannay/rust-kafka-lambda/compare/v1.0.149...v1.0.150) (2024-02-26)
+
+
+### Bug Fixes
+
+* **deps:** bump lambda_runtime from 0.9.2 to 0.10.0 ([f9ef4fe](https://github.com/kayhannay/rust-kafka-lambda/commit/f9ef4fe4a814db849703b9baf231af62169a4345))
+
 ## [1.0.149](https://github.com/kayhannay/rust-kafka-lambda/compare/v1.0.148...v1.0.149) (2024-02-26)
 
 
