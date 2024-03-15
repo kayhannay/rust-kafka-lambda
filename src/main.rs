@@ -18,6 +18,8 @@ use rust_kafka_lambda::adapter::kafka_notify_update_product_service::KafkaNotify
 use rust_kafka_lambda::business::save_converted_product_use_case::SaveConvertedProductUseCase;
 use rust_kafka_lambda::handler::lambda_kafka_event_handler::LambdaKafkaEventHandler;
 
+const VERSION: &str = env!("CARGO_PKG_VERSION");
+
 #[tokio::main]
 async fn main() -> Result<(), Error> {
     let logger = initialize_logger();
