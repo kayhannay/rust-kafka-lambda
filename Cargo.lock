@@ -1263,9 +1263,9 @@ checksum = "e2abad23fbc42b3700f2f279844dc832adb2b2eb069b2df918f455c4e18cc646"
 
 [[package]]
 name = "lib-base64"
-version = "2.0.4"
+version = "2.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e7280ef4c75c8c3b71116524b178d1bee26cbd9af0167e507fa8c7616bb69a8d"
+checksum = "2c107e4e20fb45f55e1350d5401e3b6b97561aa9e757363c280bac76794d6b2e"
 
 [[package]]
 name = "libc"
