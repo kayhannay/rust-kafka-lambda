@@ -1,6 +1,7 @@
 use aws_config::BehaviorVersion;
 use std::collections::HashMap;
-use std::fs;
+use std::{env, fs};
+use std::str::FromStr;
 use std::sync::Arc;
 use std::time::Duration;
 
@@ -17,24 +18,25 @@ use chrono::DateTime;
 use futures::StreamExt;
 use http::HeaderMap;
 use lambda_runtime::{Config, Context, LambdaEvent};
+use lambda_runtime::tracing::Level;
+use lambda_runtime::tracing::level_filters::LevelFilter;
+use lambda_runtime::tracing::subscriber::EnvFilter;
 use lib_base64::Base64;
 use rdkafka::consumer::{Consumer, StreamConsumer};
 use rdkafka::producer::FutureProducer;
 use rdkafka::{ClientConfig, Message};
-use rust_kafka_lambda;
 use rust_kafka_lambda::adapter::dynamodb_store_converted_product_service::DynamoDbStoreConvertedProductService;
 use rust_kafka_lambda::adapter::kafka_notify_update_product_service::KafkaNotifyUpdateProductService;
 use rust_kafka_lambda::business::save_converted_product_use_case::SaveConvertedProductUseCase;
 use rust_kafka_lambda::domain::product::Product;
 use rust_kafka_lambda::handler::lambda_kafka_event_handler::LambdaKafkaEventHandler;
-use slog::{o, Drain, Logger};
 use testcontainers::clients;
 
 mod kafka;
 mod localstack;
 #[tokio::test]
 async fn happy_path() {
-    let logger = initialize_logger();
+    init_logging();
     let docker = clients::Cli::default();
     let localstack = docker.run(localstack::Localstack::default());
     let localstack_port = localstack.get_host_port_ipv4(4566);
@@ -59,9 +61,7 @@ async fn happy_path() {
 
     println!("Initialize Lambda handler");
     let lambda_event_handler = LambdaKafkaEventHandler {
-        log: Logger::new(&logger, o!("logger" => "LambdaKafkaEventHandler")),
         save_converted_product_use_case: SaveConvertedProductUseCase {
-            log: Logger::new(&logger, o!("logger" => "SaveConvertedProductUseCase")),
             store_converted_product_service: DynamoDbStoreConvertedProductService {
                 dynamo_db_client: client,
                 table_name: dynamodb_table_name.to_string(),
@@ -139,7 +139,7 @@ async fn happy_path() {
 
 #[tokio::test]
 async fn delete_product_tombstone() {
-    let logger = initialize_logger();
+    init_logging();
     let docker = clients::Cli::default();
     let localstack = docker.run(localstack::Localstack::default());
     let localstack_port = localstack.get_host_port_ipv4(4566);
@@ -163,9 +163,7 @@ async fn delete_product_tombstone() {
 
     println!("Initialize Lambda handler");
     let lambda_event_handler = LambdaKafkaEventHandler {
-        log: Logger::new(&logger, o!("logger" => "LambdaKafkaEventHandler")),
         save_converted_product_use_case: SaveConvertedProductUseCase {
-            log: Logger::new(&logger, o!("logger" => "SaveConvertedProductUseCase")),
             store_converted_product_service: DynamoDbStoreConvertedProductService {
                 dynamo_db_client: client,
                 table_name: dynamodb_table_name.to_string(),
@@ -273,7 +271,7 @@ async fn delete_product_tombstone() {
 
 #[tokio::test]
 async fn change_detection_save() {
-    let logger = initialize_logger();
+    init_logging();
     let docker = clients::Cli::default();
     let localstack = docker.run(localstack::Localstack::default());
     let localstack_port = localstack.get_host_port_ipv4(4566);
@@ -296,9 +294,7 @@ async fn change_detection_save() {
 
     println!("Initialize Lambda handler");
     let lambda_event_handler = LambdaKafkaEventHandler {
-        log: Logger::new(&logger, o!("logger" => "LambdaKafkaEventHandler")),
         save_converted_product_use_case: SaveConvertedProductUseCase {
-            log: Logger::new(&logger, o!("logger" => "SaveConvertedProductUseCase")),
             store_converted_product_service: DynamoDbStoreConvertedProductService {
                 dynamo_db_client: client,
                 table_name: dynamodb_table_name.to_string(),
@@ -328,30 +324,16 @@ async fn change_detection_save() {
     //## Kafka
     println!("Check result in Kafka topic");
     let mut message_stream = consumer.stream();
-    assert_eq!(
-        true,
+    assert!(
         tokio::time::timeout(Duration::from_secs(5), message_stream.next())
             .await
             .is_ok()
     );
-    assert_eq!(
-        false,
+    assert!(
         tokio::time::timeout(Duration::from_secs(5), message_stream.next())
             .await
-            .is_ok()
+            .is_err()
     );
-}
-
-fn initialize_logger() -> Logger {
-    let decorator = slog_term::TermDecorator::new().build();
-    let drain = slog_term::FullFormat::new(decorator).build().fuse();
-    let drain = slog_envlogger::new(drain).fuse();
-    //let drain = slog::LevelFilter::new(drain, slog::Level::Info).fuse();
-    let drain = slog_async::Async::new(drain).build().fuse();
-    let logger = slog::Logger::root(drain, o!());
-    slog_scope::set_global_logger(Logger::new(&logger, o!("logger" => "global"))).cancel_reset();
-    slog_stdlog::init().unwrap_or_default();
-    logger
 }
 
 fn initialize_kafka(bootstrap_servers: String, topic: &str) -> (FutureProducer, StreamConsumer) {
@@ -377,7 +359,7 @@ fn initialize_kafka(bootstrap_servers: String, topic: &str) -> (FutureProducer, 
         .subscribe(&[topic])
         .expect("Failed to subscribe to a topic");
 
-    return (producer, consumer);
+    (producer, consumer)
 }
 
 async fn initialize_dynamodb(localstack_port: u16, dynamodb_table_name: &str) -> Client {
@@ -422,7 +404,7 @@ async fn initialize_dynamodb(localstack_port: u16, dynamodb_table_name: &str) ->
         .await
         .expect("Could not create table");
 
-    return dynamodb_client;
+    dynamodb_client
 }
 
 fn create_lambda_event_from_file(
@@ -478,10 +460,28 @@ fn create_lambda_event(
     let mut context_header = HeaderMap::new();
     context_header.insert("lambda-runtime-deadline-ms", "1000".parse().unwrap());
     let context = Context::new("some_req", config, &context_header).unwrap();
-    let lambda_event = LambdaEvent {
+    LambdaEvent {
         payload: kafka_event,
         context,
-    };
+    }
+}
 
-    return lambda_event;
+fn init_logging() {
+    let log_format = env::var("AWS_LAMBDA_LOG_FORMAT").unwrap_or_default();
+    let log_level = Level::from_str(&env::var("AWS_LAMBDA_LOG_LEVEL").unwrap_or_default()).unwrap_or(Level::INFO);
+
+    let collector = tracing_subscriber::fmt()
+        .with_target(false)
+        .without_time()
+        .with_env_filter(
+            EnvFilter::builder()
+                .with_default_directive(LevelFilter::from_level(log_level).into())
+                .from_env_lossy(),
+        );
+
+    if log_format.eq_ignore_ascii_case("json") {
+        collector.json().try_init().unwrap_or(())
+    } else {
+        collector.try_init().unwrap_or(())
+    }
 }

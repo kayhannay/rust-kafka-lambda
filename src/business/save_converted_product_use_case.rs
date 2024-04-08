@@ -1,4 +1,4 @@
-use slog::{info, Logger};
+use lambda_runtime::tracing::info;
 
 use crate::adapter::dynamodb_store_converted_product_service::DynamoDbStoreConvertedProductService;
 use crate::adapter::kafka_notify_update_product_service::KafkaNotifyUpdateProductService;
@@ -8,7 +8,6 @@ use crate::services::notify_update_product_service::NotifyUpdateProductService;
 use crate::services::store_converted_product_service::StoreConvertedProductService;
 
 pub struct SaveConvertedProductUseCase {
-    pub log: Logger,
     pub store_converted_product_service: DynamoDbStoreConvertedProductService,
     pub notify_update_product_service: KafkaNotifyUpdateProductService,
 }
@@ -22,7 +21,7 @@ impl SaveConvertedProductUseCase {
 
     async fn handle_product(&self, product_event: &ProductEvent) {
         let product_id = product_event.product_id.clone();
-        info!(self.log, "Import product {} ...", product_id);
+        info!("Import product {} ...", product_id);
         let product_option = product_event.product.as_ref();
         if product_option.is_none() {
             let deleted = self
@@ -33,7 +32,7 @@ impl SaveConvertedProductUseCase {
                 self.notify_update_product_service
                     .notify_product_delete(&product_id)
                     .await;
-                info!(self.log, "Product {} deleted successfully", product_id);
+                info!("Product {} deleted successfully", product_id);
             }
         } else {
             let product = product_option.unwrap();
@@ -42,17 +41,17 @@ impl SaveConvertedProductUseCase {
             let converted_product = business::convert_use_case::convert_product(product);
 
             // store in DynamoDB
-            info!(self.log, "Store product {} ...", product_id);
+            info!("Store product {} ...", product_id);
             let stored = self
                 .store_converted_product_service
                 .store(&converted_product)
                 .await;
             if stored {
-                info!(self.log, "Send notification for product {} ...", product_id);
+                info!("Send notification for product {} ...", product_id);
                 self.notify_update_product_service
                     .notify_product_update(&converted_product.product_id.to_string())
                     .await;
-                info!(self.log, "Product {} imported successfully", product_id);
+                info!("Product {} imported successfully", product_id);
             }
         }
     }

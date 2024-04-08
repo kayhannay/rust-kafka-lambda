@@ -8,23 +8,24 @@ use aws_lambda_events::kafka::KafkaEvent;
 use std::env;
 
 use aws_sdk_dynamodb::Client;
-use lambda_runtime::{service_fn, Error, LambdaEvent};
+use lambda_runtime::{service_fn, Error, LambdaEvent, tracing};
+use lambda_runtime::tracing::info;
 use rdkafka::producer::FutureProducer;
 use rdkafka::ClientConfig;
-use slog::{info, o, Drain, Logger};
 
 use rust_kafka_lambda::adapter::dynamodb_store_converted_product_service::DynamoDbStoreConvertedProductService;
 use rust_kafka_lambda::adapter::kafka_notify_update_product_service::KafkaNotifyUpdateProductService;
 use rust_kafka_lambda::business::save_converted_product_use_case::SaveConvertedProductUseCase;
 use rust_kafka_lambda::handler::lambda_kafka_event_handler::LambdaKafkaEventHandler;
 
+#[allow(dead_code)]
 const VERSION: &str = env!("CARGO_PKG_VERSION");
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
-    let logger = initialize_logger();
+    tracing::init_default_subscriber();
 
-    info!(logger, "Create application context ...");
+    info!("Create application context ...");
     let shared_config = aws_config::defaults(BehaviorVersion::v2023_11_09())
         .load()
         .await;
@@ -32,7 +33,7 @@ async fn main() -> Result<(), Error> {
     let table_name =
         env::var("PRODUCT_TABLE_NAME").expect("Variable PRODUCT_TABLE_NAME is not set!");
 
-    info!(logger, "Create Kafka producer ...");
+    info!("Create Kafka producer ...");
     let mut kafka_config = ClientConfig::new();
     kafka_config
         .set(
@@ -54,9 +55,8 @@ async fn main() -> Result<(), Error> {
     let topic_name = env::var("UPDATE_CONVERTED_PRODUCT_TOPIC_NAME")
         .expect("Variable UPDATE_CONVERTED_PRODUCT_TOPIC_NAME is not set!");
 
-    info!(logger, "Create save use case ...");
+    info!("Create save use case ...");
     let save_converted_product_use_case = SaveConvertedProductUseCase {
-        log: Logger::new(&logger, o!("logger" => "SaveConvertedProductUseCase")),
         store_converted_product_service: DynamoDbStoreConvertedProductService {
             dynamo_db_client: client,
             table_name,
@@ -66,27 +66,13 @@ async fn main() -> Result<(), Error> {
             topic_name,
         },
     };
-    info!(logger, "Create handler ...");
+    info!("Create handler ...");
     let handler = LambdaKafkaEventHandler {
-        log: Logger::new(&logger, o!("logger" => "LambdaKafkaEventHandler")),
         save_converted_product_use_case,
     };
     let func =
         service_fn(|event: LambdaEvent<KafkaEvent>| handler.handle_lambda_kafka_event(event));
-    info!(logger, "Start runtime ...");
+    info!("Start runtime ...");
     lambda_runtime::run(func).await?;
     Ok(())
-}
-
-fn initialize_logger() -> Logger {
-    let drain = slog_json::Json::default(std::io::stderr()).fuse();
-    let drain = slog_envlogger::new(drain).fuse();
-    let drain = slog_async::Async::new(drain).build().fuse();
-    let logger = slog::Logger::root(
-        drain,
-        o!("runtime" => "application", "version" => env!("CARGO_PKG_VERSION")),
-    );
-    slog_scope::set_global_logger(Logger::new(&logger, o!("logger" => "global"))).cancel_reset();
-    slog_stdlog::init().expect("Could not initialize standard logger");
-    logger
 }
