@@ -1,3 +1,10 @@
+## [1.0.155](https://github.com/kayhannay/rust-kafka-lambda/compare/v1.0.154...v1.0.155) (2024-04-08)
+
+
+### Bug Fixes
+
+* some minor refactoring ([7b17f0d](https://github.com/kayhannay/rust-kafka-lambda/commit/7b17f0d7ae80645f0b65277d9b6baa414a577dec))
+
 ## [1.0.154](https://github.com/kayhannay/rust-kafka-lambda/compare/v1.0.153...v1.0.154) (2024-04-08)
 
 
