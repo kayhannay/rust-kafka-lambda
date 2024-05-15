@@ -1,3 +1,10 @@
+## [1.0.156](https://github.com/kayhannay/rust-kafka-lambda/compare/v1.0.155...v1.0.156) (2024-05-15)
+
+
+### Bug Fixes
+
+* update dependencies ([d23a11c](https://github.com/kayhannay/rust-kafka-lambda/commit/d23a11cf76e347e2f480359629e5d6a34869d4fa))
+
 ## [1.0.155](https://github.com/kayhannay/rust-kafka-lambda/compare/v1.0.154...v1.0.155) (2024-04-08)
 
 
