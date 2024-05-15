@@ -1,9 +1,9 @@
 use aws_config::BehaviorVersion;
 use std::collections::HashMap;
-use std::{env, fs};
 use std::str::FromStr;
 use std::sync::Arc;
 use std::time::Duration;
+use std::{env, fs};
 
 use aws_config::meta::region::RegionProviderChain;
 use aws_lambda_events::encodings::MillisecondTimestamp;
@@ -17,10 +17,10 @@ use aws_sdk_dynamodb::Client;
 use chrono::DateTime;
 use futures::StreamExt;
 use http::HeaderMap;
-use lambda_runtime::{Config, Context, LambdaEvent};
-use lambda_runtime::tracing::Level;
 use lambda_runtime::tracing::level_filters::LevelFilter;
 use lambda_runtime::tracing::subscriber::EnvFilter;
+use lambda_runtime::tracing::Level;
+use lambda_runtime::{Config, Context, LambdaEvent};
 use lib_base64::Base64;
 use rdkafka::consumer::{Consumer, StreamConsumer};
 use rdkafka::producer::FutureProducer;
@@ -30,20 +30,19 @@ use rust_kafka_lambda::adapter::kafka_notify_update_product_service::KafkaNotify
 use rust_kafka_lambda::business::save_converted_product_use_case::SaveConvertedProductUseCase;
 use rust_kafka_lambda::domain::product::Product;
 use rust_kafka_lambda::handler::lambda_kafka_event_handler::LambdaKafkaEventHandler;
-use testcontainers::clients;
+use testcontainers::runners::AsyncRunner;
 
 mod kafka;
 mod localstack;
 #[tokio::test]
 async fn happy_path() {
     init_logging();
-    let docker = clients::Cli::default();
-    let localstack = docker.run(localstack::Localstack::default());
-    let localstack_port = localstack.get_host_port_ipv4(4566);
-    let kafka_node = docker.run(kafka::Kafka::default());
+    let localstack = localstack::Localstack::default().start().await;
+    let localstack_port = localstack.get_host_port_ipv4(4566).await;
+    let kafka_node = kafka::Kafka::default().start().await;
     let bootstrap_servers = format!(
         "127.0.0.1:{}",
-        kafka_node.get_host_port_ipv4(kafka::KAFKA_PORT)
+        kafka_node.get_host_port_ipv4(kafka::KAFKA_PORT).await
     );
     println!("Bootstrap servers: {}", bootstrap_servers);
 
@@ -140,13 +139,12 @@ async fn happy_path() {
 #[tokio::test]
 async fn delete_product_tombstone() {
     init_logging();
-    let docker = clients::Cli::default();
-    let localstack = docker.run(localstack::Localstack::default());
-    let localstack_port = localstack.get_host_port_ipv4(4566);
-    let kafka_node = docker.run(kafka::Kafka::default());
+    let localstack = localstack::Localstack::default().start().await;
+    let localstack_port = localstack.get_host_port_ipv4(4566).await;
+    let kafka_node = kafka::Kafka::default().start().await;
     let bootstrap_servers = format!(
         "127.0.0.1:{}",
-        kafka_node.get_host_port_ipv4(kafka::KAFKA_PORT)
+        kafka_node.get_host_port_ipv4(kafka::KAFKA_PORT).await
     );
 
     // given
@@ -272,13 +270,12 @@ async fn delete_product_tombstone() {
 #[tokio::test]
 async fn change_detection_save() {
     init_logging();
-    let docker = clients::Cli::default();
-    let localstack = docker.run(localstack::Localstack::default());
-    let localstack_port = localstack.get_host_port_ipv4(4566);
-    let kafka_node = docker.run(kafka::Kafka::default());
+    let localstack = localstack::Localstack::default().start().await;
+    let localstack_port = localstack.get_host_port_ipv4(4566).await;
+    let kafka_node = kafka::Kafka::default().start().await;
     let bootstrap_servers = format!(
         "127.0.0.1:{}",
-        kafka_node.get_host_port_ipv4(kafka::KAFKA_PORT)
+        kafka_node.get_host_port_ipv4(kafka::KAFKA_PORT).await
     );
 
     // given
@@ -367,7 +364,7 @@ async fn initialize_dynamodb(localstack_port: u16, dynamodb_table_name: &str) ->
     println!("Initialize Localstack and DynamoDB");
 
     let region_provider = RegionProviderChain::default_provider().or_else("eu-central-1");
-    let shared_config = aws_config::defaults(BehaviorVersion::v2023_11_09())
+    let shared_config = aws_config::defaults(BehaviorVersion::v2024_03_28())
         .region(region_provider)
         .credentials_provider(Credentials::new(
             "example", "example", None, None, "example",
@@ -376,7 +373,7 @@ async fn initialize_dynamodb(localstack_port: u16, dynamodb_table_name: &str) ->
         .await;
     let mut dynamodb_client_builder = aws_sdk_dynamodb::config::Builder::from(&shared_config);
     dynamodb_client_builder =
-        dynamodb_client_builder.endpoint_url(&format!("http://127.0.0.1:{}/", localstack_port));
+        dynamodb_client_builder.endpoint_url(format!("http://127.0.0.1:{}/", localstack_port));
     let dynamodb_client = Client::from_conf(dynamodb_client_builder.build());
     let key_name = "id";
     let ks = KeySchemaElement::builder()
@@ -468,7 +465,8 @@ fn create_lambda_event(
 
 fn init_logging() {
     let log_format = env::var("AWS_LAMBDA_LOG_FORMAT").unwrap_or_default();
-    let log_level = Level::from_str(&env::var("AWS_LAMBDA_LOG_LEVEL").unwrap_or_default()).unwrap_or(Level::INFO);
+    let log_level = Level::from_str(&env::var("AWS_LAMBDA_LOG_LEVEL").unwrap_or_default())
+        .unwrap_or(Level::INFO);
 
     let collector = tracing_subscriber::fmt()
         .with_target(false)

@@ -17,8 +17,8 @@ impl ImageArgs for KafkaArgs {
     fn into_iterator(self) -> Box<dyn Iterator<Item = String>> {
         Box::new(
             vec![
-                "/bin/bash".to_owned(),
-                "-c".to_owned(),
+                "/bin/bash".to_string(),
+                "-c".to_string(),
                 format!(
                     r#"
 echo 'clientPort={ZOOKEEPER_PORT}' > zookeeper.properties;
@@ -45,29 +45,29 @@ impl Default for Kafka {
         let mut env_vars = HashMap::new();
 
         env_vars.insert(
-            "KAFKA_ZOOKEEPER_CONNECT".to_owned(),
+            "KAFKA_ZOOKEEPER_CONNECT".to_string(),
             format!("localhost:{ZOOKEEPER_PORT}"),
         );
         env_vars.insert(
-            "KAFKA_LISTENERS".to_owned(),
+            "KAFKA_LISTENERS".to_string(),
             format!("PLAINTEXT://0.0.0.0:{KAFKA_PORT},BROKER://0.0.0.0:9092"),
         );
         env_vars.insert(
-            "KAFKA_LISTENER_SECURITY_PROTOCOL_MAP".to_owned(),
-            "BROKER:PLAINTEXT,PLAINTEXT:PLAINTEXT".to_owned(),
+            "KAFKA_LISTENER_SECURITY_PROTOCOL_MAP".to_string(),
+            "BROKER:PLAINTEXT,PLAINTEXT:PLAINTEXT".to_string(),
         );
         env_vars.insert(
-            "KAFKA_INTER_BROKER_LISTENER_NAME".to_owned(),
-            "BROKER".to_owned(),
+            "KAFKA_INTER_BROKER_LISTENER_NAME".to_string(),
+            "BROKER".to_string(),
         );
         env_vars.insert(
-            "KAFKA_ADVERTISED_LISTENERS".to_owned(),
+            "KAFKA_ADVERTISED_LISTENERS".to_string(),
             format!("PLAINTEXT://localhost:{KAFKA_PORT},BROKER://localhost:9092",),
         );
-        env_vars.insert("KAFKA_BROKER_ID".to_owned(), "1".to_owned());
+        env_vars.insert("KAFKA_BROKER_ID".to_string(), "1".to_string());
         env_vars.insert(
-            "KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR".to_owned(),
-            "1".to_owned(),
+            "KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR".to_string(),
+            "1".to_string(),
         );
 
         Self { env_vars }
@@ -78,11 +78,11 @@ impl Image for Kafka {
     type Args = KafkaArgs;
 
     fn name(&self) -> String {
-        NAME.to_owned()
+        NAME.to_string()
     }
 
     fn tag(&self) -> String {
-        TAG.to_owned()
+        TAG.to_string()
     }
 
     fn ready_conditions(&self) -> Vec<WaitFor> {
@@ -99,17 +99,27 @@ impl Image for Kafka {
 
     fn exec_after_start(&self, cs: ContainerState) -> Vec<ExecCommand> {
         let mut commands = vec![];
-        let cmd = format!(
-            "kafka-configs --alter --bootstrap-server 0.0.0.0:9092 --entity-type brokers --entity-name 1 --add-config advertised.listeners=[PLAINTEXT://127.0.0.1:{},BROKER://127.0.0.1:9092]",
+        let config = format!(
+            "advertised.listeners=[PLAINTEXT://127.0.0.1:{},BROKER://127.0.0.1:9092]",
             cs.host_port_ipv4(KAFKA_PORT)
         );
+        let cmd = vec![
+            "kafka-configs",
+            "--alter",
+            "--bootstrap-server",
+            "0.0.0.0:9092",
+            "--entity-type",
+            "brokers",
+            "--entity-name",
+            "1",
+            "--add-config",
+            config.as_str(),
+        ];
         let ready_conditions = vec![WaitFor::message_on_stdout(
             "Checking need to trigger auto leader balancing",
         )];
-        commands.push(ExecCommand {
-            cmd,
-            ready_conditions,
-        });
+        commands
+            .push(ExecCommand::new(cmd).with_container_ready_conditions(ready_conditions.clone()));
         commands
     }
 }

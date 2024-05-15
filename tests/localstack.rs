@@ -1,29 +1,24 @@
 use std::collections::HashMap;
 
-use testcontainers::core::WaitFor;
-use testcontainers::{Image, ImageArgs};
+use testcontainers::core::{Mount, WaitFor};
+use testcontainers::Image;
 
 const NAME: &str = "localstack/localstack";
 const TAG: &str = "latest";
 
-struct LocalstackArgs {}
-
-impl ImageArgs for LocalstackArgs {
-    fn into_iterator(self) -> Box<dyn Iterator<Item = String>> {
-        todo!()
-    }
-}
-
 #[derive(Debug)]
 pub struct Localstack {
     env_vars: HashMap<String, String>,
-    volumes: HashMap<String, String>,
+    volumes: Vec<Mount>,
 }
 
 impl Default for Localstack {
     fn default() -> Self {
         let mut env_vars = HashMap::new();
-        let mut volumes = HashMap::new();
+        let volumes = vec![Mount::bind_mount(
+            "/var/run/docker.sock".to_owned(),
+            "/var/run/docker.sock".to_owned(),
+        )];
 
         env_vars.insert("SERVICES".to_owned(), "dynamodb".to_owned());
         env_vars.insert("EAGER_SERVICE_LOADING".to_owned(), "1".to_owned());
@@ -31,11 +26,6 @@ impl Default for Localstack {
         env_vars.insert("PORT_WEB_UI".to_owned(), "9888".to_owned());
         env_vars.insert("LAMBDA_REMOTE_DOCKER".to_owned(), "false".to_owned());
         env_vars.insert("HOST_TMP_FOLDER".to_owned(), "/tmp/localstack".to_owned());
-
-        volumes.insert(
-            "/var/run/docker.sock".to_owned(),
-            "/var/run/docker.sock".to_owned(),
-        );
 
         Self { env_vars, volumes }
     }
@@ -62,7 +52,7 @@ impl Image for Localstack {
         Box::new(self.env_vars.iter())
     }
 
-    fn volumes(&self) -> Box<dyn Iterator<Item = (&String, &String)> + '_> {
+    fn mounts(&self) -> Box<dyn Iterator<Item = &Mount> + '_> {
         Box::new(self.volumes.iter())
     }
 }

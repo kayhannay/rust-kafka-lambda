@@ -8,8 +8,8 @@ use aws_lambda_events::kafka::KafkaEvent;
 use std::env;
 
 use aws_sdk_dynamodb::Client;
-use lambda_runtime::{service_fn, Error, LambdaEvent, tracing};
 use lambda_runtime::tracing::info;
+use lambda_runtime::{service_fn, tracing, Error, LambdaEvent};
 use rdkafka::producer::FutureProducer;
 use rdkafka::ClientConfig;
 
@@ -26,7 +26,7 @@ async fn main() -> Result<(), Error> {
     tracing::init_default_subscriber();
 
     info!("Create application context ...");
-    let shared_config = aws_config::defaults(BehaviorVersion::v2023_11_09())
+    let shared_config = aws_config::defaults(BehaviorVersion::v2024_03_28())
         .load()
         .await;
     let client = Client::new(&shared_config);
