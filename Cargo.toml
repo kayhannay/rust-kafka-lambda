@@ -10,7 +10,7 @@ publish = false
 schemafy = "0.6.0"
 schemafy_core = { version = "0.6.0" }
 serde = "1.0.201"
-serde_json = "1.0.115"
+serde_json = "1.0.117"
 serde_derive = "1.0.201"
 chrono = "0.4.38"
 aws-config = "1.4.0"
